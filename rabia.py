@@ -21,8 +21,20 @@ class MainPage(webapp.RequestHandler):
 class StorageClassDev(webapp.RequestHandler):
     def get(self):
         storage = StoreComics()
-        storage.store_comics()
-        self.response.out.write("URR")
+        storage.get_comics()
+
+        template_values = {
+            'difference_set' : storage.state['difference'],
+            'difference_count' : storage.state['difference_count'],
+            'json_count' : storage.state['json_count'],
+            'datastore_count' : storage.state['datastore_count']
+            }
+
+        path = os.path.join(os.path.dirname(__file__), 'storage.html')
+        self.response.out.write(template.render(path, template_values))
+
+
+#        self.response.out.write(storage.state)
 #        self.response.out.write(storage.state['json'])
 #        self.response.out.write(storage.state['datastore'])
 #        self.response.out.write(storage.state['difference'])

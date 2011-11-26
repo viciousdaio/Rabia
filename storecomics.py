@@ -4,13 +4,14 @@ from google.appengine.ext import db
 from google.appengine.api import urlfetch
 from sets import Set
 from models import RabiaStore
+from imageurl import GetImageURLs
 
 class StoreComics:
     def __init__(self):
         self.json_url = "http://www.reddit.com/r/fffffffuuuuuuuuuuuu/.json"
         self.state = {}
         
-    def store_comics(self):
+    def get_comics(self):
         """
         Main method. Kicks off the other methods so we can just call it and
         fetch/store only what needs to be fetched/stored.
