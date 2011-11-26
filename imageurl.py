@@ -14,8 +14,9 @@ class GetImageURLs:
 
     def query_json(self):
         """
-        Opens up the json resource.
-        We discard some data because we really don't need it
+        Performs the JSON query.
+        We discard the data we are not interested in so that we don't have
+        to worry about parsing it.
         """
         self.result = simplejson.load(urllib2.urlopen(self.json_url))
         self.result = self.result['data']['children']
@@ -23,12 +24,13 @@ class GetImageURLs:
     def process_urls(self):
         """
         To download from imgur.com, we need to attach a file extension
-        to the end of the URL so it downloads an image.
+        to the end of the URL so it downloads a comic instead of visiting
+        their landing page for that comic.
 
-        Alternatively, if the URL does not have a file extension,
+        Alternatively, if the URL does have a file extension,
         keep calm and carry on.
 
-        I chose to use .png, but it was totally arbitrary.
+        I chose to use .png, but this choice was totally arbitrary.
         """
         link_extension = '.jpg', '.JPG', '.png', '.PNG', '.gif', '.GIF'
         self.query_json()
@@ -42,8 +44,8 @@ class GetImageURLs:
 
     def get_image_url(self):
         """
-        Just an accessor.
+        Kicks off the JSON query and URL processing.
+        Returns a list of processed URLs.
         """
         self.process_urls()
         return self.image_url_list
-

@@ -6,74 +6,29 @@ from google.appengine.ext import webapp
 from google.appengine.api import urlfetch
 from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import run_wsgi_app
+
+# My Stuff
 from models import RabiaStore
-from ImageUrl import GetImageURLs
-from sets import Set
+from imageurl import GetImageURLs
+from storecomics import StoreComics
 
 class MainPage(webapp.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/plain'
         self.response.out.write("This is Rabia")
 
-class DupDetect(webapp.RequestHandler):
-    def alt_prepare_query(self):
-        """
-        We'll use two Python sets and perform a difference operation
-        between them. We get the performance of a dictionary but with
-        much more readable and compact syntax.
-        """
-        json_url = "http://www.reddit.com/r/fffffffuuuuuuuuuuuu/.json"
-        gi = GetImageURLs(json_url)
-        urls = gi.get_image_url()
-        query = db.Query(RabiaStore)
-        query.filter("url IN ", urls)
-        urls_from_json = Set(urls)
-        results = query.fetch(limit=len(urls))
-        urls_from_datastore = [each.url for each in results]
-        urls_from_datastore = Set(urls_from_datastore)
-        difference = urls_from_json - urls_from_datastore
 
-        self.response.out.write(urls_from_datastore)
-        self.response.out.write(urls_from_json)
-        self.response.out.write(difference)
-
-        if len(difference) == 0:
-            self.response.out.write("No new comics have been found!")
-        else:
-            self.response.out.write("Found new comics! Proceeding to store:")
-            for each in difference:
-                image = urlfetch.fetch(each)
-                rabia = RabiaStore()
-                rabia.encoding = image.headers['content-type']
-                rabia.comic = image.content
-                rabia.url = each
-                rabia.put()
-                string = str("Just stored: %s"), str(each)
-                self.response.out.write(string)
-
+class StorageClassDev(webapp.RequestHandler):
     def get(self):
-        self.alt_prepare_query()
-
-class PrimerRead(webapp.RequestHandler):
-    """
-    This class performs the initial primer read for the database.
-    This is never used during production.
-    """
-    def get(self):
-        json_url = "http://www.reddit.com/r/fffffffuuuuuuuuuuuu/.json"
-        gi = GetImageURLs(json_url)
-
-        for url in gi.get_image_url():
-            image = urlfetch.fetch(url)
-            rabia = RabiaStore()
-            rabia.encoding = image.headers['content-type']
-            rabia.comic = image.content
-            rabia.url = url
-            rabia.put()
-            
-        self.response.headers['Content-Type'] = 'text/plain'
-        self.response.out.write(rabia.key)
-        self.response.out.write('Just stored some images!')
+        storage = StoreComics()
+        storage.store_comics()
+        self.response.out.write("URR")
+#        self.response.out.write(storage.state['json'])
+#        self.response.out.write(storage.state['datastore'])
+#        self.response.out.write(storage.state['difference'])
+#        self.response.out.write(storage.state['json_count'])
+#        self.response.out.write(storage.state['datastore_count'])
+#        self.response.out.write(storage.state['difference_count'])
 
 class ShowComics(webapp.RequestHandler):
     def get(self):
@@ -87,6 +42,7 @@ class ShowComics(webapp.RequestHandler):
             self.response.out.write(comic.comic)
         else:
             self.response.out.write("FFFFUUUUU")
+
 
 class Browse(webapp.RequestHandler):
     def get(self):
@@ -106,10 +62,9 @@ class Browse(webapp.RequestHandler):
 
 application = webapp.WSGIApplication([
                                      ('/', MainPage),
-                                     ('/getcomics', PrimerRead),
                                      ('/showcomics', ShowComics),
                                      ('/browse', Browse),
-                                     ('/dupdetect', DupDetect)
+                                     ('/storecomics', StorageClassDev)
                                      ], debug=True)
 
 def main():
