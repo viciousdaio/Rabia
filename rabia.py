@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import os
 import urllib2
+import datetime
 from google.appengine.ext import db
 from google.appengine.ext import webapp
 from google.appengine.api import urlfetch
@@ -18,7 +19,7 @@ class MainPage(webapp.RequestHandler):
         self.response.out.write("This is Rabia")
 
 
-class StorageClassDev(webapp.RequestHandler):
+class GoStoreComics(webapp.RequestHandler):
     def get(self):
         storage = StoreComics()
         storage.get_comics()
@@ -33,50 +34,63 @@ class StorageClassDev(webapp.RequestHandler):
         path = os.path.join(os.path.dirname(__file__), 'storage.html')
         self.response.out.write(template.render(path, template_values))
 
-
-#        self.response.out.write(storage.state)
-#        self.response.out.write(storage.state['json'])
-#        self.response.out.write(storage.state['datastore'])
-#        self.response.out.write(storage.state['difference'])
-#        self.response.out.write(storage.state['json_count'])
-#        self.response.out.write(storage.state['datastore_count'])
-#        self.response.out.write(storage.state['difference_count'])
-
-class ShowComics(webapp.RequestHandler):
-    def get(self):
-        img_id = self.request.get('img')
-        rabia = RabiaStore()
-        comic = rabia.get_by_id(int(img_id))
-        next_comic = int(img_id) + 1
-        prev_comic = int(img_id) - 1
-        if comic.comic:
-            self.response.headers['Content-Type'] = comic.encoding
-            self.response.out.write(comic.comic)
-        else:
-            self.response.out.write("FFFFUUUUU")
-
-
 class Browse(webapp.RequestHandler):
     def get(self):
+        self.now = datetime.datetime.now()
+        self.img_id = self.request.get('img', default_value='FFUU')
+        if self.img_id == 'ERROR':
+            self.response.out.write("FFUUUU")
+        elif self.img_id == 'FFUU':
+            self.no_have_id()
+            self.common()
+        else:
+            self.have_id()
+            self.common()
+
+    def have_id(self):
         img_id = self.request.get('img')
-        rabia = RabiaStore()
-        comic = rabia.get_by_id(int(img_id))
+        current_comic = RabiaStore.get(img_id)
+        next_comic = RabiaStore.all().filter('__key__ <', db.Key(img_id)).order('-__key__')
+        next_comic = next_comic.get()
+        prev_comic = RabiaStore.all().filter('__key__ >', db.Key(img_id))
+        prev_comic = prev_comic.get()
 
-        template_values = {
-            'prev_comic_id' : int(img_id) - 1,
-            'next_comic_id' : int(img_id) + 1,
-            'imgur_url' : comic.url,
-            'img_id' : img_id
-            }
+        if next_comic is not None:
+            next_comic = next_comic.key()
+        else:
+            next_comic = False
 
-        path = os.path.join(os.path.dirname(__file__), 'index.html')
-        self.response.out.write(template.render(path, template_values))
+        if prev_comic is not None:
+            prev_comic = prev_comic.key()
+        else:
+            prev_comic = False
+ 
+        self.template_values = {
+            'prev_comic_id' : prev_comic,
+            'next_comic_id' : next_comic,
+            'imgur_url' : current_comic.url,
+        }
+
+    def no_have_id(self):
+         query = db.Query(RabiaStore)
+         query.filter("datetime <= ", self.now).order('-datetime')
+         results = query.fetch(limit=3)
+         current_comic = results[0]
+         next_comic = results[1]
+         comic_id = db.Key(str(results[1].key())).id()
+         self.template_values = {
+            'next_comic_id' : next_comic.key(),
+            'imgur_url' : current_comic.url,
+        }
+
+    def common(self):
+        path = os.path.join(os.path.dirname(__file__), 'browse.html')
+        self.response.out.write(template.render(path, self.template_values))
 
 application = webapp.WSGIApplication([
                                      ('/', MainPage),
-                                     ('/showcomics', ShowComics),
                                      ('/browse', Browse),
-                                     ('/storecomics', StorageClassDev)
+                                     ('/storecomics', GoStoreComics)
                                      ], debug=True)
 
 def main():

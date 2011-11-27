@@ -4,12 +4,16 @@
   </head>
   <body>
     <div id="navigation">
+      {% if prev_comic_id %}
       <a href="/browse?img={{prev_comic_id}}">Prev Comic</a>
+      {% endif %}
+      {% if next_comic_id %}
       <a href="/browse?img={{next_comic_id}}">Next Comic</a>
+      {% endif %}
     </div>
     <div id="comic_data">
       <a href="{{imgur_url}}">{{imgur_url}}</a>
     </div>
-    <img src="showcomics?img={{img_id}}"></img>
+    <img src="{{imgur_url}}"></img>
   </body>
 </html>
