@@ -21,7 +21,7 @@ class StoreComics:
         self.diff_sets()
         self.storage_logic()
 
-        # Just for debugging and testing
+        # Useful if we want to be interactive
         self.state['json'] = self.urls_from_json
         self.state['datastore'] = self.urls_from_datastore
         self.state['difference'] = self.difference
@@ -91,8 +91,8 @@ class StoreComics:
         data set.
         """
         if len(self.difference) > 0:
+            # Assumes we have comics in the datastore and just want to add more.
             self.store_comics(self.difference)
         elif len(self.urls_from_datastore) == 0:
+            # Assumes the datastore is empty.
             self.store_comics(self.urls_from_json)
-        else:
-            self.state['if_block_loc'] = str("Nothing to do here!")
