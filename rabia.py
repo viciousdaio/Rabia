@@ -15,9 +15,9 @@ from storecomics import StoreComics
 
 class MainPage(webapp.RequestHandler):
     def get(self):
-        self.response.headers['Content-Type'] = 'text/plain'
-        self.response.out.write("This is Rabia")
-
+        template_values = {}
+        path = os.path.join(os.path.dirname(__file__), 'index.html')
+        self.response.out.write(template.render(path, template_values))
 
 class GoStoreComics(webapp.RequestHandler):
     def get(self):
