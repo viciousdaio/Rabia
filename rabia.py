@@ -91,7 +91,8 @@ class Browse(webapp.RequestHandler):
 application = webapp.WSGIApplication([
                                      ('/', Browse),
                                      ('/browse', Browse),
-                                     ('/storecomics', GoStoreComics)
+                                     ('/storecomics', GoStoreComics),
+                                     ('/setup', GoStoreComics)
                                      ], debug=True)
 
 def main():
