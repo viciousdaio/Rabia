@@ -3,7 +3,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-	<title>Rabia - {{imgur_url}}</title>
+	<title>Rageless Rage - {{imgur_url}}</title>
 	<meta name="description" content="">
 	<meta name="author" content="">
 
@@ -18,8 +18,9 @@
     <div id="navigation">
       <h1>Rageless Rage</h1>
       <h2>Rage with less rage</h2>
+      <p><a href="/browse">Home</a><br />
       {% if next_comic_id %}
-      <p><a href="/browse?img={{next_comic_id}}">Next Comic</a><br />
+      <a href="/browse?img={{next_comic_id}}">Next Comic</a><br />
       {% endif %}
       {% if prev_comic_id %}
       <a href="/browse?img={{prev_comic_id}}">Prev Comic</a><br /></p> 

@@ -2,6 +2,7 @@
 import os
 import urllib2
 import datetime
+import logging
 from google.appengine.ext import db
 from google.appengine.ext import webapp
 from google.appengine.api import urlfetch
@@ -20,6 +21,13 @@ class MainPage(webapp.RequestHandler):
         self.response.out.write(template.render(path, template_values))
 
 class GoStoreComics(webapp.RequestHandler):
+    def get(self):
+        storage = StoreComics()
+        storage.interactive = False
+        storage.get_comics()
+        self.response.out.write("Finished")
+
+class InteractiveStorage(webapp.RequestHandler):
     def get(self):
         storage = StoreComics()
         storage.get_comics()
@@ -50,9 +58,9 @@ class Browse(webapp.RequestHandler):
     def have_id(self):
         img_id = self.request.get('img')
         current_comic = RabiaStore.get(img_id)
-        next_comic = RabiaStore.all().filter('__key__ <', db.Key(img_id)).order('-__key__')
+        next_comic = RabiaStore.all().filter('datetime <', current_comic.datetime).order('-datetime')
         next_comic = next_comic.get()
-        prev_comic = RabiaStore.all().filter('__key__ >', db.Key(img_id))
+        prev_comic = RabiaStore.all().filter('datetime >', current_comic.datetime).order('datetime')
         prev_comic = prev_comic.get()
 
         if next_comic is not None:
@@ -92,7 +100,7 @@ application = webapp.WSGIApplication([
                                      ('/', Browse),
                                      ('/browse', Browse),
                                      ('/storecomics', GoStoreComics),
-                                     ('/setup', GoStoreComics)
+                                     ('/interactivestorage', GoStoreComics)
                                      ], debug=True)
 
 def main():

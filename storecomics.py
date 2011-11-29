@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+import logging
+
 from google.appengine.ext import db
 from google.appengine.api import urlfetch
 from sets import Set
@@ -10,6 +12,7 @@ class StoreComics:
     def __init__(self):
         self.json_url = "http://www.reddit.com/r/fffffffuuuuuuuuuuuu/.json"
         self.state = {}
+        self.interactive = True
         
     def get_comics(self):
         """
@@ -80,6 +83,9 @@ class StoreComics:
             rabia.comic = image.content
             rabia.url = comic
             rabia.put()
+
+            if self.interactive == False:
+                logging.info("Just stored a record for: %s" % comic)
 
     def storage_logic(self):
         """
