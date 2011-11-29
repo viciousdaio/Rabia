@@ -1,0 +1,10 @@
+body {
+	text-align: center;
+	min-width: 600px;
+}
+
+#wrapper {
+	margin:0 auto;
+	width:600px;
+	text-align: left;
+}

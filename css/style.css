@@ -1,0 +1,33 @@
+body {
+    text-align: center;
+    min-width: 600px;
+    background: #EEEEEE;
+}
+
+#wrapper {
+    margin: 0 auto;
+    width: 80%;
+    text-align: left;
+}
+
+#navigation {
+    float: right;
+    padding: 15px;
+    width: 300px;
+    text-align: left;
+    background-color: #CCCCCC;
+    font-family: Helvetica, Arial, Sans-Serif;
+}
+
+a:link {
+    text-decoration: none;
+    color: #606060;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+#comic {
+    float: left;
+}

@@ -1,0 +1,18 @@
+<html>
+<head>
+<title>Comic Storage</title>
+</head>
+<body>
+<div id="statistics">
+<p>Found {{ difference_count }} new comics</p>
+<p>Found {{ json_count }} comics on Reddit</p>
+<p>Found {{ datastore_count }} of these comics in the datastore</p>
+</div>
+<div id="new_comics">
+{% for comic in difference_set %}
+<p><img src="{{ comic }}"></img></p>
+<p><a href="{{ comic }}">{{ comic }}</a></p>
+{% endfor %}
+</div>
+</body>
+</html>

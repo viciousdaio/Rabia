@@ -1,0 +1,35 @@
+<!doctype html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+	<title>Rabia - {{imgur_url}}</title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+
+	<link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <div id="navigation">
+      <h1>Rabia</h1>
+      <h2>The easier way to rage</h2>
+      {% if next_comic_id %}
+      <p><a href="/browse?img={{next_comic_id}}">Next Comic</a><br />
+      {% endif %}
+      {% if prev_comic_id %}
+      <a href="/browse?img={{prev_comic_id}}">Prev Comic</a><br /></p> 
+      {% endif %}
+      <p>Relevant Reddit Thread:<br /><a href="TODO">Title Goes Here</a></p>
+      <p>Original Image Link:<br /><a href="{{imgur_url}}">{{imgur_url}}</a></p>
+    </div>
+    <div id="comic">
+      <img src="{{imgur_url}}"></img>
+    </div>
+  </div>
+</body>
+</html>

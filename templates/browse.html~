@@ -1,0 +1,34 @@
+<!doctype html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+	<title>Rabia - {{imgur_url}}</title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+
+	<link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <div>
+      {% if prev_comic_id %}
+      <a href="/browse?img={{prev_comic_id}}">Prev Comic</a>
+      {% endif %}
+      {% if next_comic_id %}
+      <a href="/browse?img={{next_comic_id}}">Next Comic</a>
+      {% endif %}
+    </div>
+    <div>
+      <a href="{{imgur_url}}">{{imgur_url}}</a>
+    </div>
+    <div>
+      <img src="{{imgur_url}}"></img>
+    </div>
+  </div>
+</body>
+</html>
