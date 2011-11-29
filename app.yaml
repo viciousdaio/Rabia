@@ -1,4 +1,4 @@
-application: rabia
+application: ragelessrage
 version: 1
 runtime: python
 api_version: 1
@@ -8,3 +8,6 @@ handlers:
   static_dir: css
 - url: /.*
   script: rabia.py
+- url: /storecomics
+  script: rabia.py
+  login: admin

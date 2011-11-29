@@ -89,7 +89,7 @@ class Browse(webapp.RequestHandler):
         self.response.out.write(template.render(path, self.template_values))
 
 application = webapp.WSGIApplication([
-                                     ('/', MainPage),
+                                     ('/', Browse),
                                      ('/browse', Browse),
                                      ('/storecomics', GoStoreComics)
                                      ], debug=True)

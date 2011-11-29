@@ -16,15 +16,14 @@
 <body>
   <div id="wrapper">
     <div id="navigation">
-      <h1>Rabia</h1>
-      <h2>The easier way to rage</h2>
+      <h1>Rageless Rage</h1>
+      <h2>Rage with less rage</h2>
       {% if next_comic_id %}
       <p><a href="/browse?img={{next_comic_id}}">Next Comic</a><br />
       {% endif %}
       {% if prev_comic_id %}
       <a href="/browse?img={{prev_comic_id}}">Prev Comic</a><br /></p> 
       {% endif %}
-      <p>Relevant Reddit Thread:<br /><a href="TODO">Title Goes Here</a></p>
       <p>Original Image Link:<br /><a href="{{imgur_url}}">{{imgur_url}}</a></p>
     </div>
     <div id="comic">
