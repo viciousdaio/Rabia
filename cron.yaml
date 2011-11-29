@@ -1,0 +1,4 @@
+cron:
+- description: Gets the freshest rage comics from Reddit
+  url: /storecomics
+  schedule: every 10 minutes
