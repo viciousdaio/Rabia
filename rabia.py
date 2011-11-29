@@ -16,7 +16,7 @@ from storecomics import StoreComics
 class MainPage(webapp.RequestHandler):
     def get(self):
         template_values = {}
-        path = os.path.join(os.path.dirname(__file__), 'index.html')
+        path = os.path.join(os.path.dirname(__file__), 'templates/index.html')
         self.response.out.write(template.render(path, template_values))
 
 class GoStoreComics(webapp.RequestHandler):
@@ -31,7 +31,7 @@ class GoStoreComics(webapp.RequestHandler):
             'datastore_count' : storage.state['datastore_count']
             }
 
-        path = os.path.join(os.path.dirname(__file__), 'storage.html')
+        path = os.path.join(os.path.dirname(__file__), 'templates/storage.html')
         self.response.out.write(template.render(path, template_values))
 
 class Browse(webapp.RequestHandler):
@@ -84,7 +84,8 @@ class Browse(webapp.RequestHandler):
         }
 
     def common(self):
-        path = os.path.join(os.path.dirname(__file__), 'browse.html')
+        path = os.path.join(os.path.dirname(__file__), 'templates/browse.html')
+#        self.response.out.write(path)
         self.response.out.write(template.render(path, self.template_values))
 
 application = webapp.WSGIApplication([
